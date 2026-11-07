@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10120f">
+  <meta name="description" content="Acompanhe sua jornada por One Piece, sem spoilers e até offline.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>Rota da Grand Line — One Piece</title>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail">
+      <a class="brand" href="#inicio" aria-label="Rota da Grand Line, início"><span class="brand-mark">☠</span><span>GRAND<br>LINE</span></a>
+      <nav class="side-nav" aria-label="Navegação principal">
+        <button class="nav-item active" data-view="inicio"><span>⌂</span><small>Início</small></button>
+        <button class="nav-item" data-view="jornada"><span>◉</span><small>Jornada</small></button>
+        <button class="nav-item" data-view="filmes"><span>▣</span><small>Filmes</small></button>
+      </nav>
+      <div class="rail-bottom"><span class="sync-dot"></span><small>Seu save<br>fica aqui</small></div>
+    </aside>
+
+    <main id="inicio" class="main">
+      <header class="topbar"><div class="breadcrumb">O NAVEGADOR <span>/</span> SUA JORNADA</div><div class="top-actions"><span class="offline-pill"><i></i> <span id="connection-label">PRONTO PARA OFFLINE</span></span><button class="install-button" id="install-button">Instalar app</button><button class="icon-button" id="backup-button" title="Exportar ou importar progresso" aria-label="Exportar ou importar progresso">↗</button></div></header>
+      <div id="view-home" class="view">
+        <section class="hero">
+          <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="sea sea-one"></div><div class="sea sea-two"></div><div class="ship">⛵</div><div class="compass">N<br><span>✦</span></div></div>
+          <div class="hero-copy"><div class="eyebrow"><span class="eyebrow-line"></span> UMA LONGA VIAGEM, NO SEU RITMO</div><h1>O mar é enorme.<br><em>Vamos por partes.</em></h1><p>Saiba onde continuar e o que vem depois. Sem caçar listas, sem spoiler.</p><button id="continue-button" class="primary-button">Continuar jornada <span>→</span></button></div>
+          <div class="hero-stamp"><span>LOGBOOK</span><b>01</b><small>GRAND LINE</small></div>
+        </section>
+
+        <section class="progress-row" aria-label="Progresso">
+          <div class="progress-heading"><div><span class="section-kicker">SEU LOGBOOK</span><h2>Até aqui</h2></div><div class="percent"><strong id="progress-percent">0</strong><span>%</span></div></div>
+          <div class="progress-track"><div id="progress-fill"></div></div>
+          <div class="progress-meta"><span id="progress-count">0 de 0 arcos concluídos</span><span id="current-position">Comece do episódio 1</span></div>
+        </section>
+
+        <section class="badge-shelf"><div><span class="section-kicker">PEQUENAS CONQUISTAS</span><h2>Marcos da viagem</h2><p>As insígnias aparecem conforme você avança.</p></div><div class="badge-list" id="badge-list"></div></section>
+
+        <section class="next-card" id="next-card">
+          <div class="next-label"><span class="next-arrow">↗</span><span>SEU PRÓXIMO PASSO</span></div>
+          <div class="next-content"><div><div class="arc-tag">PRÓXIMO ARCO</div><h3 id="next-title">East Blue</h3><p id="next-description">A jornada começa aqui.</p></div><div class="episode-chip"><span>EPISÓDIOS</span><strong id="next-episodes">1–61</strong></div></div>
+          <button id="next-mark" class="text-button">Marcar arco como assistido <span>→</span></button>
+        </section>
+
+        <section class="journey-section"><div class="section-heading"><div><span class="section-kicker">A TRAVESSIA</span><h2>Arcos e sagas</h2></div><button class="quiet-button" data-goto="jornada">Ver jornada completa <span>→</span></button></div>
+          <div class="filter-row" role="group" aria-label="Filtrar arcos"><button class="filter-chip selected" data-filter="todos">Tudo <span id="total-count">0</span></button><button class="filter-chip" data-filter="pendentes">Por assistir</button><button class="filter-chip" data-filter="concluidos">Concluídos</button><label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Buscar arco" aria-label="Buscar arco"></label></div>
+          <div id="arc-list" class="arc-list"></div>
+        </section>
+        <footer class="footer"><span>Feito para acompanhar a viagem, não para apressá-la.</span><div><button id="bookmark-button">☆ Favoritar site</button><button id="export-button">Exportar save</button><button id="import-button">Importar save</button><input id="import-file" type="file" accept="application/json,.json" hidden></div></footer>
+      </div>
+      <div id="view-films" class="view hidden"><div class="page-heading"><span class="section-kicker">SEM TROCAR DE LISTA</span><h1>Uma pausa para o cinema.</h1><p>Os filmes ficam fora da linha principal. Cada um mostra o ponto seguro para assistir sem antecipar personagens ou acontecimentos.</p></div><div id="film-list" class="film-list"></div></div>
+      <div id="view-jornada" class="view hidden"><div class="page-heading"><span class="section-kicker">DA PARTIDA AO NOVO MUNDO</span><h1>A jornada inteira.</h1><p>Marque um arco quando terminar. Para fillers, escolha assistir ou pular — os dois contam no seu logbook.</p></div><div class="journey-summary" id="journey-summary"></div><div id="full-arc-list" class="arc-list full-list"></div></div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
+

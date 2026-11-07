@@ -16,6 +16,7 @@
     /* Aplicação forçada da fonte Inter (Sans-serif) e fim total de serifas */
     body {
       font-family: 'Inter', sans-serif !important;
+      scroll-behavior: smooth;
     }
     /* Transições suaves e efeitos para o carrossel de banners */
     .carousel-item {
@@ -45,9 +46,17 @@
     .ep-card {
       min-height: 44px;
     }
+    /* Destaque pulsante para o episódio atual */
+    @keyframes pulse-highlight {
+      0%, 100% { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+      50% { border-color: rgba(245, 158, 11, 1); box-shadow: 0 0 10px 4px rgba(245, 158, 11, 0.3); }
+    }
+    .current-ep-highlight {
+      animation: pulse-highlight 2s infinite ease-in-out;
+    }
   </style>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased pb-16 selection:bg-red-600 selection:text-white">
+<body class="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased pb-24 selection:bg-red-600 selection:text-white">
 
   <!-- ================= CARROSSEL BANNER AUTOMÁTICO ================= -->
   <header class="relative w-full overflow-hidden bg-black" style="aspect-ratio: 21/9; max-height: 480px;">
@@ -99,13 +108,13 @@
   <main class="max-w-5xl mx-auto px-4 mt-8">
     
     <!-- CARD DE PERFIL E CADASTRO -->
-    <section class="bg-gray-900 border border-gray-800 p-6 rounded-2xl mb-8 shadow-2xl relative overflow-hidden">
+    <section class="bg-gray-900 border border-gray-800 p-6 rounded-2xl mb-6 shadow-2xl relative overflow-hidden">
       <div class="absolute top-0 right-0 w-64 h-64 bg-red-600/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
         <!-- Info de Perfil Cadastrado -->
         <div class="flex items-center gap-5 w-full md:w-auto">
-          <div class="relative">
+          <div class="relative cursor-pointer" onclick="abrirModalCadastro()">
             <img id="user-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=luffy" alt="Avatar" class="w-18 h-18 md:w-20 md:h-20 rounded-full border-4 border-red-500 object-cover bg-gray-950 shadow-lg shadow-red-950/40" />
             <span class="absolute -bottom-1 -right-1 bg-gradient-to-r from-red-600 to-amber-500 text-[10px] font-black px-2 py-0.5 rounded-full border border-gray-900 shadow">BANDO</span>
           </div>
@@ -139,6 +148,22 @@
       </div>
     </section>
 
+    <!-- ================= NAVEGAÇÃO RÁPIDA / ABAS DE SAGAS ================= -->
+    <nav class="mb-8 overflow-x-auto pb-3 scrollbar-none flex gap-2 md:gap-3 sticky top-0 bg-gray-950/95 py-3 z-30 border-b border-gray-900">
+      <div class="flex gap-2 min-w-max px-1">
+        <button onclick="navegarSaga('east_blue')" class="text-xs md:text-sm font-bold bg-gray-900 border border-gray-850 text-gray-400 hover:text-red-500 hover:border-red-500/55 px-3 py-2 rounded-xl transition duration-150 flex items-center gap-1.5">🌊 East Blue</button>
+        <button onclick="navegarSaga('alabasta')" class="text-xs md:text-sm font-bold bg-gray-900 border border-gray-850 text-gray-400 hover:text-red-500 hover:border-red-500/55 px-3 py-2 rounded-xl transition duration-150 flex items-center gap-1.5">🏜️ Alabasta</button>
+        <button onclick="navegarSaga('skypiea')" class="text-xs md:text-sm font-bold bg-gray-900 border border-gray-850 text-gray-400 hover:text-red-500 hover:border-red-500/55 px-3 py-2 rounded-xl transition duration-150 flex items-center gap-1.5">☁️ Skypiea</button>
+        <button onclick="navegarSaga('water_7')" class="text-xs md:text-sm font-bold bg-gray-900 border border-gray-850 text-gray-400 hover:text-red-500 hover:border-red-500/55 px-3 py-2 rounded-xl transition duration-150 flex items-center gap-1.5">⚙️ Water 7</button>
+        <button onclick="navegarSaga('thriller_bark')" class="text-xs md:text-sm font-bold bg-gray-900 border border-gray-850 text-gray-400 hover:text-red-500 hover:border-red-500/55 px-3 py-2 rounded-xl transition duration-150 flex items-center gap-1.5">🧟 Thriller</button>
+        <button onclick="navegarSaga('war')" class="text-xs md:text-sm font-bold bg-gray-900 border border-gray-850 text-gray-400 hover:text-red-500 hover:border-red-500/55 px-3 py-2 rounded-xl transition duration-150 flex items-center gap-1.5">🌋 Marineford</button>
+        <button onclick="navegarSaga('fishman')" class="text-xs md:text-sm font-bold bg-gray-900 border border-gray-850 text-gray-400 hover:text-red-500 hover:border-red-500/55 px-3 py-2 rounded-xl transition duration-150 flex items-center gap-1.5">🧜‍♀️ Homem-Peixe</button>
+        <button onclick="navegarSaga('dressrosa')" class="text-xs md:text-sm font-bold bg-gray-900 border border-gray-850 text-gray-400 hover:text-red-500 hover:border-red-500/55 px-3 py-2 rounded-xl transition duration-150 flex items-center gap-1.5">🦩 Dressrosa</button>
+        <button onclick="navegarSaga('yonkou')" class="text-xs md:text-sm font-bold bg-gray-900 border border-gray-850 text-gray-400 hover:text-red-500 hover:border-red-500/55 px-3 py-2 rounded-xl transition duration-150 flex items-center gap-1.5">👑 Yonkou</button>
+        <button onclick="navegarSaga('final')" class="text-xs md:text-sm font-bold bg-red-950/20 border border-red-500/35 text-red-500 hover:text-red-400 hover:border-red-400 px-4 py-2 rounded-xl transition duration-150 flex items-center gap-1.5 shadow shadow-red-950/25 font-black">🚀 SAGA FINAL</button>
+      </div>
+    </nav>
+
     <!-- ================= SISTEMA DE INSÍGNIAS ================= -->
     <section class="bg-gray-900 border border-gray-800 p-6 rounded-2xl mb-8 shadow-2xl">
       <h3 class="text-sm md:text-md font-extrabold uppercase tracking-widest text-red-500 mb-5 flex items-center gap-2">
@@ -153,6 +178,11 @@
     <div id="sagas-container" class="space-y-8"></div>
 
   </main>
+
+  <!-- Botão Flutuante (Ir para atual/último EP marcado) -->
+  <button id="btn-atual-flutuante" onclick="irParaAtual()" class="fixed bottom-6 right-6 bg-red-600 hover:bg-red-500 text-white border border-red-400 font-extrabold text-sm px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2 transition duration-200 transform scale-0 z-40">
+    <i class="fa-solid fa-location-crosshairs animate-pulse"></i> Ir para o atual (<span id="btn-atual-numero">...</span>)
+  </button>
 
   <!-- ================= MODAL DE CADASTRO / EDIÇÃO PERFIL ================= -->
   <div id="cadastro-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden backdrop-blur-sm">
@@ -405,6 +435,7 @@
       document.getElementById('progress-text').innerText = `${porcentagem}% (${validosAssistidos.length}/${totalCanon.length} eps)`;
 
       renderizarConquistas(porcentagem);
+      atualizarBotaoFlutuante();
     }
 
     function renderizarConquistas(porcentagemAtual) {
@@ -468,6 +499,7 @@
         btn.classList.replace('border-gray-700', 'border-emerald-600');
         btn.classList.replace('text-gray-400', 'text-emerald-100');
         btn.classList.add('shadow-lg', 'shadow-emerald-950/20');
+        btn.classList.remove('current-ep-highlight');
         icon.innerHTML = '<i class="fa-solid fa-check-double text-emerald-300"></i>';
       } else {
         btn.classList.replace('bg-emerald-800', 'bg-gray-800');
@@ -475,6 +507,14 @@
         btn.classList.replace('text-emerald-100', 'text-gray-400');
         btn.classList.remove('shadow-lg', 'shadow-emerald-950/20');
         icon.innerHTML = '<i class="fa-regular fa-circle text-gray-655"></i>';
+        
+        // Destacar como atual se for o menor não marcado
+        const menorNaoVisto = obterUltimoEpisodioMarcaoOuSeguinte();
+        if (ep === menorNaoVisto) {
+          btn.classList.add('current-ep-highlight');
+        } else {
+          btn.classList.remove('current-ep-highlight');
+        }
       }
     }
 
@@ -494,10 +534,91 @@
       });
 
       targetEl.innerText = `${assistidosSaga}/${totalSaga} Ep. Vistos`;
+      
+      // Auto-colapsar e fechar sagas 100% completas
+      const detailsEl = document.getElementById(`details-saga-${sagaId}`);
+      if (detailsEl && totalSaga > 0 && assistidosSaga === totalSaga && detailsEl.hasAttribute('open')) {
+        detailsEl.removeAttribute('open');
+      }
     }
 
     function atualizarProgressoDeTodasSagas() {
       sagas.forEach(saga => atualizarProgressoSaga(saga.id));
+    }
+
+    // UX: Descobrir o episódio "atual" em que o usuário está navegando
+    function obterUltimoEpisodioMarcaoOuSeguinte() {
+      const todosValidos = obterTotalEpisodiosValidos();
+      if (assistidos.length === 0) return todosValidos[0];
+      
+      // Encontra o maior episódio marcado e pega o seguinte na lista
+      const maiorVisto = Math.max(...assistidos);
+      const indexMaior = todosValidos.indexOf(maiorVisto);
+      
+      if (indexMaior !== -1 && indexMaior < todosValidos.length - 1) {
+        return todosValidos[indexMaior + 1];
+      }
+      return maiorVisto;
+    }
+
+    // Atualiza e mostra o botão flutuante rápido
+    function atualizarBotaoFlutuante() {
+      const btn = document.getElementById('btn-atual-flutuante');
+      const numSpan = document.getElementById('btn-atual-numero');
+      
+      if (assistidos.length > 0) {
+        const atual = obterUltimoEpisodioMarcaoOuSeguinte();
+        numSpan.innerText = `EP ${atual}`;
+        btn.classList.remove('scale-0');
+        btn.classList.add('scale-100');
+      } else {
+        btn.classList.remove('scale-100');
+        btn.classList.add('scale-0');
+      }
+    }
+
+    // Ação do Botão Flutuante
+    function irParaAtual() {
+      const atual = obterUltimoEpisodioMarcaoOuSeguinte();
+      let sagaIdDestino = "east_blue";
+
+      // Descobre a saga em que esse episódio pertence
+      for (const saga of sagas) {
+        let epEncontrado = false;
+        for (const arco of saga.arcos) {
+          if (arco.eps.includes(atual)) {
+            sagaIdDestino = saga.id;
+            epEncontrado = true;
+            break;
+          }
+        }
+        if (epEncontrado) break;
+      }
+
+      // Garante que a saga de destino esteja aberta
+      const details = document.getElementById(`details-saga-${sagaIdDestino}`);
+      if (details) details.setAttribute('open', '');
+
+      // Move a tela suavemente para o episódio focado
+      setTimeout(() => {
+        const epBtn = document.getElementById(`ep-btn-${atual}`);
+        if (epBtn) {
+          epBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          
+          // Reforça destaque
+          epBtn.classList.add('scale-110', 'current-ep-highlight');
+          setTimeout(() => epBtn.classList.remove('scale-110'), 2000);
+        }
+      }, 200);
+    }
+
+    // UX: Quick navigation
+    function navegarSaga(sagaId) {
+      const details = document.getElementById(`details-saga-${sagaId}`);
+      if (details) {
+        details.setAttribute('open', '');
+        details.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
 
     // Exportar e Importar Progresso
@@ -550,7 +671,7 @@
           });
 
           arcosHtml += `
-            <div class="mb-5 bg-gray-900/40 rounded-2xl p-5 border border-gray-850">
+            <div class="mb-5 bg-gray-900/40 rounded-2xl p-5 border border-gray-855">
               <div class="flex justify-between items-center mb-4">
                 <h4 class="font-bold text-gray-200 text-base flex items-center gap-2">${arco.name} <span class="text-xs text-gray-500 font-semibold">(${arco.eps.length} eps)</span></h4>
                 <button onclick="toggleArcoCompleto('${saga.id}', ${index})" class="text-[10px] md:text-xs font-black text-red-500 hover:text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/25 px-2.5 py-1.5 rounded-lg transition-all">
@@ -565,7 +686,7 @@
         });
 
         container.innerHTML += `
-          <details open class="group bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden transition-all duration-300">
+          <details id="details-saga-${saga.id}" open class="group bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden transition-all duration-300">
             <summary class="flex justify-between items-center p-5 cursor-pointer hover:bg-gray-855 select-none">
               <div class="flex items-center gap-4">
                 <span class="text-3xl">${saga.icon}</span>

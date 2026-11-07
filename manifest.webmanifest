@@ -1,0 +1,15 @@
+{
+  "name": "Rota da Grand Line — One Piece",
+  "short_name": "Grand Line",
+  "description": "Acompanhe sua jornada de One Piece, até offline.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#10120f",
+  "theme_color": "#10120f",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
+

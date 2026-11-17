@@ -6,117 +6,140 @@
     <title>One Piece Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .ep-canonical { background-color: #1f2937; border-color: #4b5563; color: #f3f4f6; }
-        .ep-filler { background-color: #eab308; border-color: #ca8a04; color: #111827; }
-        .ep-checkbox:checked + label, .movie-checkbox:checked + label { background-color: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1f2937; }
-        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        
+        /* Scrollbar Moderna */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Estilos de Episódios */
+        .ep-btn {
+            display: flex; align-items: center; justify-content: center;
+            height: 40px; border-radius: 8px; font-weight: 600; font-size: 0.875rem;
+            transition: all 0.2s ease; cursor: pointer; user-select: none;
+            border: 1px solid transparent;
+        }
+        
+        /* Canônico Não Visto */
+        .ep-canonical { background-color: #1e293b; border-color: #334155; color: #cbd5e1; }
+        .ep-canonical:hover { background-color: #334155; transform: translateY(-2px); }
+        
+        /* Filler Não Visto */
+        .ep-filler { background-color: #422006; border-color: #713f12; color: #facc15; }
+        .ep-filler:hover { background-color: #713f12; color: #fef08a; transform: translateY(-2px); }
+        
+        /* Episódio Visto (Serve para Filler e Canônico) */
+        .ep-watched { background-color: #e11d48 !important; border-color: #be123c !important; color: white !important; box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.3); }
+        .ep-watched:hover { background-color: #be123c !important; transform: translateY(-2px); }
+
+        /* Animação Ep Atual */
+        .highlight-ep { animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse-ring {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(56, 189, 248, 0); }
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans pb-20">
+<body class="pb-24">
 
-    <!-- Vídeo de Introdução -->
-    <div id="intro-video-container" class="fixed inset-0 z-50 bg-black flex items-center justify-center">
-        <video id="intro-video" class="w-full h-full object-cover" autoplay playsinline muted>
-            <source src="abertura.mp4" type="video/mp4">
-        </video>
-        <button onclick="fecharIntro()" class="absolute top-6 right-6 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-bold z-50 transition">Pular Intro</button>
-    </div>
-
-    <!-- Pop-up de Celebração -->
-    <div id="celebration-popup" class="fixed inset-0 z-40 bg-black/90 hidden flex-col items-center justify-center transition-opacity duration-500 opacity-0">
-        <img id="celeb-img" src="" class="w-64 h-32 object-cover rounded-lg border-4 border-yellow-500 mb-4 shadow-[0_0_20px_rgba(234,179,8,0.5)]">
-        <h2 class="text-4xl font-black text-yellow-400 uppercase tracking-widest text-center">Saga Concluída!</h2>
-        <p id="celeb-text" class="text-xl text-gray-300 mt-2 mb-6"></p>
-        <button onclick="fecharCelebracao()" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-8 py-3 rounded-full font-bold text-lg transition">Avançar</button>
-    </div>
-
-    <!-- Header & Menu Hambúrguer -->
-    <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-30 shadow-lg">
-        <div class="max-w-5xl mx-auto p-4 flex justify-between items-center">
-            <h1 class="text-2xl font-black text-red-500 tracking-wider uppercase">☠️ OP Tracker</h1>
+    <!-- Header Glassmorphism -->
+    <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 shadow-sm">
+        <div class="max-w-6xl mx-auto p-4 flex justify-between items-center">
+            <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 tracking-tight">
+                OP TRACKER
+            </h1>
             
-            <button onclick="toggleMenu()" class="text-white focus:outline-none md:hidden">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            <button onclick="toggleMenu()" class="text-slate-300 hover:text-white md:hidden transition">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
 
-            <nav class="hidden md:flex items-center gap-4">
-                <button onclick="switchTab('eps')" class="text-gray-200 hover:text-red-500 font-bold transition">Episódios</button>
-                <button onclick="switchTab('movies')" class="text-gray-200 hover:text-red-500 font-bold transition">Filmes</button>
-                <button onclick="exportarDados()" class="text-gray-200 hover:text-red-500 font-bold transition">Exportar</button>
-                <label class="text-gray-200 hover:text-red-500 font-bold cursor-pointer transition">
+            <nav class="hidden md:flex items-center gap-6">
+                <button onclick="switchTab('eps')" class="text-sm font-semibold text-slate-300 hover:text-white transition">Episódios</button>
+                <button onclick="switchTab('movies')" class="text-sm font-semibold text-slate-300 hover:text-white transition">Filmes</button>
+                <button onclick="exportarDados()" class="text-sm font-semibold text-slate-300 hover:text-white transition">Exportar</button>
+                <label class="text-sm font-semibold text-slate-300 hover:text-white cursor-pointer transition">
                     Importar <input type="file" class="hidden" accept=".json" onchange="importarDados(event)">
                 </label>
-                <input type="text" id="profile-name-desktop" placeholder="Nome do Pirata" class="bg-gray-700 border border-gray-600 rounded px-3 py-1 text-sm focus:outline-none focus:border-red-500" oninput="salvarPerfil(this.value)">
+                <input type="text" id="profile-name-desktop" placeholder="Seu Nome Pirata" class="bg-slate-800 border border-slate-700 rounded-full px-4 py-1.5 text-sm text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" oninput="salvarPerfil(this.value)">
             </nav>
         </div>
         
-        <nav id="mobile-menu" class="hidden bg-gray-800 border-t border-gray-700 md:hidden flex-col p-4 gap-4">
-            <button onclick="switchTab('eps')" class="text-left text-gray-200 font-bold hover:text-red-500">Episódios</button>
-            <button onclick="switchTab('movies')" class="text-left text-gray-200 font-bold hover:text-red-500">Filmes</button>
-            <button onclick="exportarDados()" class="text-left text-gray-200 font-bold hover:text-red-500">Exportar Backup</button>
-            <label class="text-left text-gray-200 font-bold cursor-pointer hover:text-red-500">
+        <!-- Mobile Menu -->
+        <nav id="mobile-menu" class="hidden bg-slate-900 border-t border-slate-800 md:hidden flex-col p-4 gap-4 shadow-xl absolute w-full">
+            <button onclick="switchTab('eps')" class="text-left text-slate-300 font-semibold hover:text-white">Episódios</button>
+            <button onclick="switchTab('movies')" class="text-left text-slate-300 font-semibold hover:text-white">Filmes</button>
+            <button onclick="exportarDados()" class="text-left text-slate-300 font-semibold hover:text-white">Exportar Backup</button>
+            <label class="text-left text-slate-300 font-semibold cursor-pointer hover:text-white">
                 Importar Backup <input type="file" class="hidden" accept=".json" onchange="importarDados(event)">
             </label>
-            <input type="text" id="profile-name-mobile" placeholder="Nome do Pirata" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm focus:outline-none focus:border-red-500" oninput="salvarPerfil(this.value)">
+            <input type="text" id="profile-name-mobile" placeholder="Seu Nome Pirata" class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-red-500" oninput="salvarPerfil(this.value)">
         </nav>
     </header>
 
-    <!-- Container Principal -->
-    <main class="max-w-5xl mx-auto p-4">
+    <main class="max-w-6xl mx-auto p-4 md:p-6 mt-4">
         
-        <!-- Banner Carrossel do Topo -->
-        <div class="mb-8 rounded-xl overflow-hidden shadow-lg border border-gray-700 h-48 sm:h-64 md:h-80">
-            <img id="top-banner" src="" class="w-full h-full object-cover">
+        <!-- Banner Carrossel do Topo (Clean) -->
+        <div class="mb-10 rounded-2xl overflow-hidden shadow-2xl border border-slate-800 h-48 sm:h-72 md:h-96 relative group">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10"></div>
+            <img id="top-banner" src="" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            <div class="absolute bottom-6 left-6 z-20">
+                <p class="text-slate-300 text-sm font-semibold tracking-wider mb-1">ACOMPANHE SUA JORNADA</p>
+                <h2 class="text-3xl md:text-5xl font-black text-white">Rumo ao One Piece</h2>
+            </div>
         </div>
 
         <!-- Aba de Episódios -->
         <div id="eps-view">
-            <div class="flex flex-wrap gap-4 mb-6 text-sm font-bold text-gray-300">
-                <div class="flex items-center gap-2"><span class="w-4 h-4 bg-gray-800 border border-gray-600 rounded inline-block"></span> Canônico</div>
-                <div class="flex items-center gap-2"><span class="w-4 h-4 bg-yellow-500 border border-yellow-600 rounded inline-block"></span> Filler (Opcional)</div>
+            <!-- Legenda -->
+            <div class="flex flex-wrap gap-6 mb-8 text-xs md:text-sm font-semibold text-slate-400 bg-slate-800/50 p-4 rounded-xl border border-slate-800">
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-slate-700"></span> Canônico</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-yellow-500"></span> Filler (Pode pular)</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-rose-600"></span> Assistido</div>
             </div>
-            <div id="sagas-container"></div>
+            
+            <div id="sagas-container" class="space-y-8"></div>
         </div>
 
         <!-- Aba de Filmes -->
         <div id="movies-view" class="hidden">
-            <h2 class="text-3xl font-black text-red-500 uppercase tracking-wide mb-6">Filmes</h2>
-            <div id="movies-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+            <h2 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 uppercase tracking-wide mb-8">Filmes Canônicos & Especiais</h2>
+            <div id="movies-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
     </main>
 
-    <!-- Botão Flutuante (Apenas na aba de episódios) -->
-    <button id="btn-atual" onclick="irParaAtual()" class="fixed bottom-6 right-6 bg-red-600 hover:bg-red-700 text-white p-4 rounded-full shadow-lg shadow-red-900/50 font-bold z-30 transition flex items-center justify-center group">
-        <span class="hidden group-hover:inline mr-2">Ep. Atual</span> ⚓
+    <!-- Botão Flutuante Ep Atual -->
+    <button id="btn-atual" onclick="irParaAtual()" class="fixed bottom-8 right-8 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white p-4 rounded-full shadow-[0_0_20px_rgba(225,29,72,0.4)] font-bold z-30 transition-all hover:scale-110 flex items-center justify-center group">
+        <svg class="w-6 h-6 mr-0 md:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span class="hidden md:inline">Ep. Atual</span>
     </button>
 
     <script>
-        // Imagens do Carrossel (Topo)
+        // Utilizando imagens comprovadas que existem no seu pacote ZIP para o carrossel funcionar
         const carouselImages = [
-            "banner-generico-tripulacao.jpg",
-            "banner-alianca-completa.jpg",
-            "banner-novo-mundo.jpg",
-            "banner-timeskip-grupo.jpg"
+            "one-piece_Saga_dos_Yonkou_01.webp",
+            "one-piece_Saga_Final.webp",
+            "one-piece_Marineford_01.webp",
+            "one-piece_Water_7_01.webp"
         ];
         
-        // Sagas e Arquivos Locais
         const sagas = [
             { id: "eastblue", name: "Saga East Blue", img: "one-piece_East_Blue_01.webp", start: 1, end: 61 },
             { id: "alabasta", name: "Saga Alabasta", img: "one-piece_Alabasta.webp", start: 62, end: 143 },
             { id: "skypiea", name: "Saga Skypiea", img: "one-piece_Skypiea_01.webp", start: 144, end: 206 },
             { id: "water7", name: "Saga Water 7", img: "one-piece_Water_7_01.webp", start: 207, end: 325 },
             { id: "thrillerbark", name: "Saga Thriller Bark", img: "one-piece_Thriller_Bark_01.webp", start: 326, end: 384 },
-            { id: "marineford", name: "Saga Guerra de Marineford", img: "one-piece_Marineford_01.webp", start: 385, end: 516 },
-            { id: "fishman", name: "Saga Ilha dos Homens-Peixe", img: "one-piece_Ilha_dos_Tritoes.webp", start: 517, end: 574 },
+            { id: "marineford", name: "Guerra de Marineford", img: "one-piece_Marineford_01.webp", start: 385, end: 516 },
+            { id: "fishman", name: "Ilha dos Homens-Peixe", img: "one-piece_Ilha_dos_Tritoes.webp", start: 517, end: 574 },
             { id: "dressrosa", name: "Saga Dressrosa", img: "one-piece_Dressrosa_01.webp", start: 575, end: 746 },
-            { id: "yonkou", name: "Saga Yonkou", img: "one-piece_Saga_dos_Yonkou_01.webp", start: 747, end: 1085 },
-            { id: "final", name: "Saga Final", img: "one-piece_Saga_Final.webp", start: 1086, end: 1180 }
+            { id: "yonkou", name: "Saga dos Yonkou", img: "one-piece_Saga_dos_Yonkou_01.webp", start: 747, end: 1085 },
+            { id: "final", name: "Saga Final (Egghead)", img: "one-piece_Saga_Final.webp", start: 1086, end: 1180 }
         ];
 
-        // Mapeamento Rigoroso de Fillers
         const fillers = [
             50, 54, 55, 56, 57, 58, 59, 60, 61, 93, 98, 99, 101, 102, 131, 132, 133, 134, 135, 136, 137, 138, 139, 
             140, 141, 142, 143, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 213, 214, 215, 216, 220, 
@@ -125,7 +148,6 @@
             499, 506, 542, 575, 576, 577, 578, 590, 747, 748, 749, 750, 775, 780, 781, 782, 895, 896, 907, 1029, 1030
         ];
 
-        // Lista de Filmes
         const movies = [
             { id: 1, title: "O Filme", year: 2000 },
             { id: 2, title: "Aventura na Ilha Neerlandesa", year: 2001 },
@@ -144,28 +166,14 @@
             { id: 15, title: "Red", year: 2022 }
         ];
 
-        // Banco de Dados Local
         let watchedEpisodes = JSON.parse(localStorage.getItem('opTrackerData')) || {};
         let watchedMovies = JSON.parse(localStorage.getItem('opTrackerMovies')) || {};
 
-        // Sorteia Imagem Topo
         function sortearBanner() {
             const randomImg = carouselImages[Math.floor(Math.random() * carouselImages.length)];
             document.getElementById('top-banner').src = randomImg;
         }
 
-        // Sistema de Vídeo
-        function fecharIntro() {
-            const introContainer = document.getElementById('intro-video-container');
-            const introVideo = document.getElementById('intro-video');
-            introVideo.pause();
-            introContainer.style.opacity = '0';
-            setTimeout(() => introContainer.style.display = 'none', 500);
-        }
-        document.getElementById('intro-video').addEventListener('ended', fecharIntro);
-        document.getElementById('intro-video').addEventListener('error', fecharIntro);
-
-        // Menu e Navegação
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
@@ -176,9 +184,8 @@
             document.getElementById('eps-view').classList.add('hidden');
             document.getElementById('movies-view').classList.add('hidden');
             document.getElementById(`${tab}-view`).classList.remove('hidden');
-            
             document.getElementById('btn-atual').style.display = tab === 'eps' ? 'flex' : 'none';
-            document.getElementById('mobile-menu').classList.add('hidden'); // Fecha menu no mobile
+            document.getElementById('mobile-menu').classList.add('hidden');
         }
 
         function salvarPerfil(valor) {
@@ -187,7 +194,13 @@
             document.getElementById('profile-name-mobile').value = valor;
         }
 
-        // Renderizar Sagas
+        function carregarPerfil() {
+            const nome = localStorage.getItem('opTrackerProfile') || '';
+            document.getElementById('profile-name-desktop').value = nome;
+            document.getElementById('profile-name-mobile').value = nome;
+        }
+
+        // Renderização que roda apenas uma vez para não quebrar o layout
         function renderSagas() {
             const container = document.getElementById('sagas-container');
             container.innerHTML = '';
@@ -199,54 +212,151 @@
 
                 for (let i = saga.start; i <= saga.end; i++) {
                     totalSaga++;
-                    const isChecked = watchedEpisodes[i] ? 'checked' : '';
-                    if (isChecked) watchedSaga++;
+                    const isWatched = watchedEpisodes[i];
+                    if (isWatched) watchedSaga++;
                     
                     const isFiller = fillers.includes(i);
-                    const colorClass = isFiller ? 'ep-filler' : 'ep-canonical';
+                    let btnClass = 'ep-btn ';
+                    
+                    if (isWatched) {
+                        btnClass += 'ep-watched';
+                    } else if (isFiller) {
+                        btnClass += 'ep-filler';
+                    } else {
+                        btnClass += 'ep-canonical';
+                    }
 
-                    epsHTML += `
-                        <div class="relative">
-                            <input type="checkbox" id="ep-${i}" class="ep-checkbox hidden" ${isChecked} onchange="toggleEp(${i}, '${saga.id}')">
-                            <label for="ep-${i}" class="block text-center border rounded py-2 text-sm font-bold cursor-pointer transition select-none ${colorClass}">
-                                ${i}
-                            </label>
-                        </div>
-                    `;
+                    epsHTML += `<button id="ep-${i}" data-saga="${saga.id}" data-filler="${isFiller}" onclick="toggleEp(${i}, '${saga.id}')" class="${btnClass}">${i}</button>`;
                 }
 
                 const isCompleted = totalSaga === watchedSaga && totalSaga > 0;
                 
                 const sagaCard = document.createElement('div');
-                sagaCard.className = 'mb-8 bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-700';
+                sagaCard.className = 'bg-slate-800/80 rounded-2xl overflow-hidden border border-slate-700 shadow-xl';
                 
-                // Cabeçalho da Saga Fora da Imagem
                 sagaCard.innerHTML = `
-                    <div class="p-4 bg-gray-900 border-b border-gray-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div class="p-5 md:p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
-                            <h2 class="text-2xl font-black text-red-500 uppercase tracking-wide">${saga.name}</h2>
-                            <div class="flex items-center gap-3 mt-1">
-                                <span class="text-sm font-semibold bg-gray-700 px-3 py-1 rounded text-gray-200">
+                            <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">${saga.name}</h2>
+                            <div class="flex flex-wrap items-center gap-3 mt-2">
+                                <span class="text-sm font-bold bg-slate-900 px-3 py-1 rounded-full text-slate-300 shadow-inner" id="progress-text-${saga.id}">
                                     ${watchedSaga} / ${totalSaga} EPs
                                 </span>
-                                ${isCompleted ? '<span class="text-yellow-400 text-sm font-bold bg-gray-700 px-3 py-1 rounded">🏆 Concluída</span>' : ''}
+                                <span id="badge-${saga.id}" class="${isCompleted ? 'inline-block' : 'hidden'} text-xs font-bold bg-gradient-to-r from-yellow-400 to-amber-600 px-3 py-1 rounded-full text-white shadow-lg">🏆 Concluída</span>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <button onclick="marcarSaga('${saga.id}')" class="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-bold transition">Marcar Vista</button>
-                            <button onclick="toggleSection('${saga.id}')" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded transition text-white" id="icon-${saga.id}">
-                                ${isCompleted ? '▼' : '▲'}
+                        <div class="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+                            <button onclick="marcarSaga('${saga.id}')" class="flex-1 md:flex-none bg-slate-700 hover:bg-slate-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold transition shadow">Marcar Tudo</button>
+                            <button onclick="toggleSection('${saga.id}')" class="bg-slate-900 hover:bg-black px-4 py-2.5 rounded-lg transition text-slate-300 border border-slate-700" id="icon-${saga.id}">
+                                ${isCompleted ? 'Ver Episódios' : 'Ocultar'}
                             </button>
                         </div>
                     </div>
-                    <img src="${saga.img}" class="w-full h-40 sm:h-56 object-cover cursor-pointer" onclick="toggleSection('${saga.id}')">
                     
-                    <div id="content-${saga.id}" class="${isCompleted ? 'hidden' : 'grid'} grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2 p-4 bg-gray-800">
-                        ${epsHTML}
+                    <div id="content-${saga.id}" class="${isCompleted ? 'hidden' : 'block'} border-t border-slate-700">
+                        <img src="${saga.img}" class="w-full h-32 md:h-48 object-cover">
+                        <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2 p-5 bg-slate-900/50">
+                            ${epsHTML}
+                        </div>
                     </div>
                 `;
                 container.appendChild(sagaCard);
             });
+        }
+
+        // Nova lógica de Toggle (Atualiza apenas o botão clicado, sem recarregar a tela toda)
+        function toggleEp(ep, sagaId) {
+            const btn = document.getElementById(`ep-${ep}`);
+            const isFiller = btn.getAttribute('data-filler') === 'true';
+            
+            if (watchedEpisodes[ep]) {
+                delete watchedEpisodes[ep];
+                btn.classList.remove('ep-watched');
+                btn.classList.add(isFiller ? 'ep-filler' : 'ep-canonical');
+            } else {
+                watchedEpisodes[ep] = true;
+                btn.classList.remove('ep-canonical', 'ep-filler');
+                btn.classList.add('ep-watched');
+            }
+            
+            salvarDadosLocais();
+            atualizarProgressoSaga(sagaId);
+        }
+
+        function atualizarProgressoSaga(sagaId) {
+            const saga = sagas.find(s => s.id === sagaId);
+            let total = 0, watched = 0;
+            
+            for (let i = saga.start; i <= saga.end; i++) {
+                total++;
+                if (watchedEpisodes[i]) watched++;
+            }
+            
+            document.getElementById(`progress-text-${sagaId}`).textContent = `${watched} / ${total} EPs`;
+            
+            const badge = document.getElementById(`badge-${sagaId}`);
+            if (watched === total && total > 0) {
+                badge.classList.remove('hidden');
+                badge.classList.add('inline-block');
+            } else {
+                badge.classList.remove('inline-block');
+                badge.classList.add('hidden');
+            }
+        }
+
+        function marcarSaga(sagaId) {
+            const saga = sagas.find(s => s.id === sagaId);
+            for (let i = saga.start; i <= saga.end; i++) {
+                watchedEpisodes[i] = true;
+                const btn = document.getElementById(`ep-${i}`);
+                if(btn) {
+                    btn.classList.remove('ep-canonical', 'ep-filler');
+                    btn.classList.add('ep-watched');
+                }
+            }
+            salvarDadosLocais();
+            atualizarProgressoSaga(sagaId);
+        }
+
+        function toggleSection(id) {
+            const content = document.getElementById(`content-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.textContent = 'Ocultar';
+            } else {
+                content.classList.add('hidden');
+                icon.textContent = 'Ver Episódios';
+            }
+        }
+
+        // Foco no Episódio Atual
+        function irParaAtual() {
+            let lastWatched = 0;
+            for (let i = 1; i <= 1180; i++) {
+                if (watchedEpisodes[i] && !fillers.includes(i)) lastWatched = i;
+            }
+            
+            let nextEp = lastWatched + 1;
+            while (fillers.includes(nextEp)) { nextEp++; }
+
+            const element = document.getElementById(`ep-${nextEp}`);
+            if (element) {
+                const sagaId = element.getAttribute('data-saga');
+                const content = document.getElementById(`content-${sagaId}`);
+                
+                if (content.classList.contains('hidden')) {
+                    toggleSection(sagaId);
+                }
+                
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    element.classList.add('highlight-ep', 'scale-110');
+                    setTimeout(() => element.classList.remove('highlight-ep', 'scale-110'), 2500);
+                }, 150);
+            } else {
+                alert("Você está em dia com os episódios canônicos!");
+            }
         }
 
         // Renderizar Filmes
@@ -255,129 +365,39 @@
             container.innerHTML = '';
 
             movies.forEach(movie => {
-                const isChecked = watchedMovies[movie.id] ? 'checked' : '';
+                const isWatched = watchedMovies[movie.id];
+                const bgClass = isWatched ? 'bg-rose-900/30 border-rose-500' : 'bg-slate-800/80 border-slate-700';
+                const textClass = isWatched ? 'text-rose-400' : 'text-slate-400';
+                const checkClass = isWatched ? 'bg-rose-600 border-rose-600 text-white' : 'bg-slate-900 border-slate-600 text-transparent';
+
                 container.innerHTML += `
-                    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 flex items-center justify-between shadow">
-                        <div>
-                            <p class="text-xs text-red-400 font-bold">FILME ${movie.id} • ${movie.year}</p>
-                            <h3 class="text-lg font-bold text-gray-100 leading-tight mt-1">${movie.title}</h3>
+                    <div id="movie-card-${movie.id}" class="rounded-xl p-5 flex items-center justify-between shadow-lg border transition duration-300 ${bgClass}">
+                        <div class="pr-4">
+                            <p class="text-xs font-black tracking-widest uppercase mb-1 ${textClass}">Filme ${movie.id} • ${movie.year}</p>
+                            <h3 class="text-lg font-bold text-white leading-tight">${movie.title}</h3>
                         </div>
-                        <div class="relative ml-4">
-                            <input type="checkbox" id="movie-${movie.id}" class="movie-checkbox hidden" ${isChecked} onchange="toggleMovie(${movie.id})">
-                            <label for="movie-${movie.id}" class="w-10 h-10 flex items-center justify-center bg-gray-700 border border-gray-600 rounded-full cursor-pointer transition">
-                                ✔
-                            </label>
-                        </div>
+                        <button onclick="toggleMovie(${movie.id})" id="movie-btn-${movie.id}" class="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full border-2 transition duration-200 ${checkClass}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </button>
                     </div>
                 `;
             });
         }
 
-        // Ações de Episódio e Filmes
-        function toggleSection(id) {
-            const content = document.getElementById(`content-${id}`);
-            const icon = document.getElementById(`icon-${id}`);
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                icon.textContent = '▲';
-            } else {
-                content.classList.add('hidden');
-                icon.textContent = '▼';
-            }
-        }
-
-        function toggleEp(ep, sagaId) {
-            const checkbox = document.getElementById(`ep-${ep}`);
-            if (checkbox.checked) {
-                watchedEpisodes[ep] = true;
-            } else {
-                delete watchedEpisodes[ep];
-            }
-            salvarDadosLocais();
-            
-            const saga = sagas.find(s => s.id === sagaId);
-            let watched = 0;
-            for (let i = saga.start; i <= saga.end; i++) {
-                if (watchedEpisodes[i]) watched++;
-            }
-            
-            if (watched === (saga.end - saga.start + 1) && checkbox.checked) {
-                dispararCelebracao(saga);
-            }
-            setTimeout(renderSagas, 100); 
-        }
-
         function toggleMovie(movieId) {
-            const checkbox = document.getElementById(`movie-${movieId}`);
-            if (checkbox.checked) {
-                watchedMovies[movieId] = true;
-            } else {
+            if (watchedMovies[movieId]) {
                 delete watchedMovies[movieId];
+            } else {
+                watchedMovies[movieId] = true;
             }
             salvarDadosLocais();
-            renderMovies();
+            renderMovies(); // Filmes são leves, podemos dar re-render sem problemas de grid
         }
 
-        function marcarSaga(sagaId) {
-            const saga = sagas.find(s => s.id === sagaId);
-            for (let i = saga.start; i <= saga.end; i++) {
-                watchedEpisodes[i] = true;
-            }
-            salvarDadosLocais();
-            renderSagas();
-            dispararCelebracao(saga);
-        }
-
-        // Celebração e Foco
-        function dispararCelebracao(saga) {
-            const popup = document.getElementById('celebration-popup');
-            document.getElementById('celeb-img').src = saga.img;
-            document.getElementById('celeb-text').textContent = `Você dominou a ${saga.name}!`;
-            
-            popup.classList.remove('hidden');
-            setTimeout(() => popup.classList.remove('opacity-0'), 50);
-        }
-
-        function fecharCelebracao() {
-            const popup = document.getElementById('celebration-popup');
-            popup.classList.add('opacity-0');
-            setTimeout(() => popup.classList.add('hidden'), 500);
-        }
-
-        function irParaAtual() {
-            let lastWatched = 0;
-            for (let i = 1; i <= 1180; i++) {
-                if (watchedEpisodes[i] && !fillers.includes(i)) lastWatched = i;
-            }
-            let nextEp = lastWatched + 1;
-            
-            while (fillers.includes(nextEp)) {
-                nextEp++;
-            }
-
-            const element = document.getElementById(`ep-${nextEp}`);
-            if (element) {
-                const sagaContainer = element.closest('.grid');
-                if(sagaContainer.classList.contains('hidden')) {
-                    sagaContainer.classList.remove('hidden');
-                }
-                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                const label = element.nextElementSibling;
-                label.classList.add('ring-4', 'ring-yellow-400', 'scale-110');
-                setTimeout(() => label.classList.remove('ring-4', 'ring-yellow-400', 'scale-110'), 2000);
-            }
-        }
-
-        // Exportação / Importação de Dados
+        // Exportação / Importação Modernizadas e Seguras
         function salvarDadosLocais() {
             localStorage.setItem('opTrackerData', JSON.stringify(watchedEpisodes));
             localStorage.setItem('opTrackerMovies', JSON.stringify(watchedMovies));
-        }
-
-        function carregarPerfil() {
-            const nome = localStorage.getItem('opTrackerProfile') || '';
-            document.getElementById('profile-name-desktop').value = nome;
-            document.getElementById('profile-name-mobile').value = nome;
         }
 
         function exportarDados() {
@@ -386,13 +406,19 @@
                 movies: watchedMovies,
                 profile: localStorage.getItem('opTrackerProfile') || ''
             };
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "bando_onepiece_backup.json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
+            
+            // Usando Blob para evitar bloqueios de URL longas em navegadores modernos
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "op_tracker_backup.json";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
             document.getElementById('mobile-menu').classList.add('hidden');
         }
 
@@ -404,20 +430,18 @@
                     try {
                         const importedData = JSON.parse(e.target.result);
                         if (importedData.episodes) {
-                            // Novo formato (inclui filmes e perfil)
                             watchedEpisodes = importedData.episodes || {};
                             watchedMovies = importedData.movies || {};
                             if (importedData.profile) salvarPerfil(importedData.profile);
                         } else {
-                            // Formato antigo (apenas episódios)
                             watchedEpisodes = importedData;
                         }
                         salvarDadosLocais();
                         renderSagas();
                         renderMovies();
-                        alert('Dados do bando importados com sucesso!');
+                        alert('Backup importado com sucesso, Capitão!');
                     } catch (err) {
-                        alert('Erro ao ler o arquivo. Certifique-se de que é um JSON válido.');
+                        alert('Erro ao ler o arquivo. Tem certeza que é o backup correto?');
                     }
                     document.getElementById('mobile-menu').classList.add('hidden');
                 };

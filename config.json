@@ -1,39 +1,40 @@
 {
   "site": {
-    "brandName": "OP TRACKER",
-    "logoIcon": "",
+    "brandName": "RUMO AO ONE PIECE",
+    "logoIcon": "img/icon-192.png",
     "heroEyebrow": "ACOMPANHE SUA JORNADA",
     "heroTitle": "Rumo ao One Piece",
-    "footerTitle": "OP Tracker",
+    "footerTitle": "RUMO AO ONE PIECE",
     "footerSubtitle": "Desenvolvido para organizar sua jornada pelo Novo Mundo."
   },
   "colors": {
-    "bgPage": "#0f172a",
-    "bgCard": "#1e293b",
+    "bgPage": "#fff6d9",
+    "bgCard": "#eda356",
     "accent": "#e11d48",
     "accentHover": "#be123c",
-    "epWatched": "#e11d48",
-    "epCanonicalBg": "#1e293b",
-    "epFillerBg": "#422006",
-    "epFillerText": "#facc15"
+    "epWatched": "#f97b02",
+    "epCanonicalBg": "#b95417",
+    "epFillerBg": "#4a382c",
+    "epFillerText": "#969694"
   },
   "heroBanners": [
-    "topo-01.webp",
-    "topo-02.webp",
-    "topo-03.webp",
-    "topo-04.webp"
+    "img/capa-op_01_1200x400.png",
+    "img/luffy-02_1200x400.png",
+    "img/banner-op_1200x400__0000s_0021_BANDO-OP_-(11)---Copia.png",
+    "img/banner-op_1200x400__0000s_0008_bando-capa.png",
+    "img/CAPA OP_1200x400- (9).png"
   ],
   "sagaBanners": {
-    "eastblue": "banner-01-east-blue.webp",
-    "alabasta": "banner-02-alabasta.webp",
-    "skypiea": "banner-03-skypiea.webp",
-    "water7": "banner-04-water-7.webp",
-    "thrillerbark": "banner-05-thriller-bark.webp",
-    "summitwar": "banner-06-summit-war.webp",
-    "fishman": "banner-07-homens-peixe.webp",
-    "dressrosa": "banner-08-dressrosa.webp",
-    "wholecake": "banner-09-whole-cake.webp",
-    "wano": "banner-10-wano.webp",
-    "final": "banner-11-saga-final.webp"
+    "eastblue": "img/1-EAST-BLUE-OP_01_1200x400.png",
+    "alabasta": "img/ALABASTA-OP_01.jpg_1200x400.png",
+    "skypiea": "img/1-SKYPIEA-OP_01_1200x400.webp",
+    "water7": "img/water 7_op_1220x400.webp",
+    "thrillerbark": "img/thriller bark_04-1200x400.webp",
+    "summitwar": "img/summit war_01-1200x400.webp",
+    "fishman": "img/ILHA-DOS-HOMENS-PEIXE-OP_01_1200x400.png",
+    "dressrosa": "img/dressrosa_01-1200x400.webp",
+    "wholecake": "img/whole cake_01-1200x400.webp",
+    "wano": "img/wano_02_1200x400.png",
+    "final": "img/EGGHEAD-OP_02_1200x400.png"
   }
 }

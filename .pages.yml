@@ -1,0 +1,104 @@
+media:
+  input: img
+  output: img
+  categories: [image]
+
+content:
+  - name: config
+    label: Painel do Site (Cores, Textos e Banners)
+    type: file
+    path: config.json
+    format: json
+    fields:
+      - name: site
+        label: Identidade e Textos
+        type: object
+        fields:
+          - name: brandName
+            label: Nome no Topo
+            type: string
+          - name: logoIcon
+            label: Ícone / Logo do Topo (Opcional)
+            type: image
+          - name: heroEyebrow
+            label: Subtítulo do Banner Principal
+            type: string
+          - name: heroTitle
+            label: Título do Banner Principal
+            type: string
+          - name: footerTitle
+            label: Título do Rodapé
+            type: string
+          - name: footerSubtitle
+            label: Frase do Rodapé
+            type: string
+      - name: colors
+        label: Cores do Tema (código HEX, ex. #e11d48)
+        type: object
+        fields:
+          - name: bgPage
+            label: Fundo da Página
+            type: string
+          - name: bgCard
+            label: Fundo dos Cards
+            type: string
+          - name: accent
+            label: Cor Principal (Botões e Destaques)
+            type: string
+          - name: accentHover
+            label: Cor Principal (Hover)
+            type: string
+          - name: epWatched
+            label: Episódio Assistido
+            type: string
+          - name: epCanonicalBg
+            label: Episódio Canônico (Fundo)
+            type: string
+          - name: epFillerBg
+            label: Episódio Filler (Fundo)
+            type: string
+          - name: epFillerText
+            label: Episódio Filler (Texto)
+            type: string
+      - name: heroBanners
+        label: Carrossel do Topo (sorteado ao abrir)
+        type: image
+        options:
+          multiple: true
+      - name: sagaBanners
+        label: Banners das 11 Sagas
+        type: object
+        fields:
+          - name: eastblue
+            label: 1. Saga East Blue
+            type: image
+          - name: alabasta
+            label: 2. Saga Alabasta
+            type: image
+          - name: skypiea
+            label: 3. Saga Skypiea
+            type: image
+          - name: water7
+            label: 4. Saga Water 7
+            type: image
+          - name: thrillerbark
+            label: 5. Saga Thriller Bark
+            type: image
+          - name: summitwar
+            label: 6. Saga Summit War
+            type: image
+          - name: fishman
+            label: 7. Saga da Ilha dos Homens-Peixe
+            type: image
+          - name: dressrosa
+            label: 8. Saga Dressrosa
+            type: image
+          - name: wholecake
+            label: 9. Saga Whole Cake Island
+            type: image
+          - name: wano
+            label: 10. Saga do País de Wano
+            type: image
+          - name: final
+            label: 11. Saga Final
+            type: image

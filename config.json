@@ -8,14 +8,14 @@
     "footerSubtitle": "Desenvolvido para organizar sua jornada pelo Novo Mundo."
   },
   "colors": {
-    "bgPage": "#fff6d9",
-    "bgCard": "#eda356",
+    "bgPage": "#090d16",
+    "bgCard": "#111827",
     "accent": "#e11d48",
     "accentHover": "#be123c",
-    "epWatched": "#f97b02",
-    "epCanonicalBg": "#b95417",
-    "epFillerBg": "#4a382c",
-    "epFillerText": "#969694"
+    "epWatched": "#e11d48",
+    "epCanonicalBg": "#1e293b",
+    "epFillerBg": "#422006",
+    "epFillerText": "#facc15"
   },
   "heroBanners": [
     "img/capa-op_01_1200x400.png",

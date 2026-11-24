@@ -1,0 +1,39 @@
+{
+  "site": {
+    "brandName": "OP TRACKER",
+    "logoIcon": "",
+    "heroEyebrow": "ACOMPANHE SUA JORNADA",
+    "heroTitle": "Rumo ao One Piece",
+    "footerTitle": "OP Tracker",
+    "footerSubtitle": "Desenvolvido para organizar sua jornada pelo Novo Mundo."
+  },
+  "colors": {
+    "bgPage": "#0f172a",
+    "bgCard": "#1e293b",
+    "accent": "#e11d48",
+    "accentHover": "#be123c",
+    "epWatched": "#e11d48",
+    "epCanonicalBg": "#1e293b",
+    "epFillerBg": "#422006",
+    "epFillerText": "#facc15"
+  },
+  "heroBanners": [
+    "topo-01.webp",
+    "topo-02.webp",
+    "topo-03.webp",
+    "topo-04.webp"
+  ],
+  "sagaBanners": {
+    "eastblue": "banner-01-east-blue.webp",
+    "alabasta": "banner-02-alabasta.webp",
+    "skypiea": "banner-03-skypiea.webp",
+    "water7": "banner-04-water-7.webp",
+    "thrillerbark": "banner-05-thriller-bark.webp",
+    "summitwar": "banner-06-summit-war.webp",
+    "fishman": "banner-07-homens-peixe.webp",
+    "dressrosa": "banner-08-dressrosa.webp",
+    "wholecake": "banner-09-whole-cake.webp",
+    "wano": "banner-10-wano.webp",
+    "final": "banner-11-saga-final.webp"
+  }
+}
